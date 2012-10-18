@@ -87,8 +87,8 @@ extends Mage_Catalog_Model_Layer_Filter_Price
 
     protected function _renderRangeLabel($fromPrice, $toPrice)
     {
-        $store              = Mage::app()->getStore();
-        $formattedFromPrice = $store->formatPrice($fromPrice);
+        $store      = Mage::app()->getStore();
+        $formattedFromPrice  = $store->formatPrice($fromPrice);
         if ($fromPrice === '') {
             return Mage::helper('aurmil_customizepricefilter')->__('Under %s', $store->formatPrice($toPrice));
         } elseif ($toPrice === '') {
@@ -96,7 +96,7 @@ extends Mage_Catalog_Model_Layer_Filter_Price
         } elseif ($fromPrice == $toPrice && Mage::app()->getStore()->getConfig(self::XML_PATH_ONE_PRICE_INTERVAL)) {
             return $formattedFromPrice;
         } else {
-            if (Mage::getStoreConfigFlag('catalog/layered_navigation/price_subtraction') && ($fromPrice != $toPrice)) {
+            if (($fromPrice != $toPrice) && Mage::getStoreConfigFlag('catalog/layered_navigation/price_subtraction')) {
                 $toPrice -= .01;
             }
             return Mage::helper('catalog')->__('%s - %s', $formattedFromPrice, $store->formatPrice($toPrice));
