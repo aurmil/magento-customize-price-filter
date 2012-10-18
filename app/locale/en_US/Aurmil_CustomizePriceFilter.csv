@@ -1,0 +1,6 @@
+"Price Ranges","Price Ranges"
+"Format: ([min1])-[max1];[min2]-[max2];...;[minN]-([maxN]) - min1 and maxN are optional. Empty field means default Magento manual behavior.","Format: ([min1])-[max1];[min2]-[max2];...;[minN]-([maxN]) - min1 and maxN are optional. Empty field means default Magento manual behavior."
+"Provided Layered Navigation Price Ranges are incorrect.","Provided Layered Navigation Price Ranges are incorrect."
+"Under %s","Under %s"
+"Subtract 0.01 from the highest value of each price range","Subtract 0.01 from the highest value of each price range"
+"Select Yes to keep Magento default behavior.","Select Yes to keep Magento default behavior."

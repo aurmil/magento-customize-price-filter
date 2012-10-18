@@ -1,0 +1,37 @@
+<?xml version="1.0"?>
+<config>
+    <sections>
+        <catalog>
+            <groups>
+                <layered_navigation>
+                    <fields>
+                        <price_ranges translate="label comment" module="aurmil_customizepricefilter">
+                            <label>Price Ranges</label>
+                            <comment><![CDATA[Format: ([min1])-[max1];[min2]-[max2];...;[minN]-([maxN]) - min1 and maxN are optional. Empty field means default Magento manual behavior.]]></comment>
+                            <frontend_type>text</frontend_type>
+                            <validate>validate-no-html-tags required-entry</validate>
+                            <backend_model>aurmil_customizepricefilter/adminhtml_system_config_backend_price_ranges</backend_model>
+                            <depends>
+                                <price_range_calculation>manual</price_range_calculation>
+                            </depends>
+                            <sort_order>50</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </price_ranges>
+                        <price_subtraction translate="label comment" module="aurmil_customizepricefilter">
+                            <label>Subtract 0.01 from the highest value of each price range</label>
+                            <comment><![CDATA[Select Yes to keep Magento default behavior.]]></comment>
+                            <frontend_type>select</frontend_type>
+                            <source_model>adminhtml/system_config_source_yesno</source_model>
+                            <sort_order>60</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>0</show_in_store>
+                        </price_subtraction>
+                    </fields>
+                </layered_navigation>
+            </groups>
+        </catalog>
+    </sections>
+</config>
