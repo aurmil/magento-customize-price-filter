@@ -26,6 +26,7 @@ Note: this extension requires the __[GNU MP PHP extension](http://www.php.net/ma
 In __System > Configuration > Catalog > Catalog > Layered Navigation__, this extension adds two new options: __Price Ranges__ and __Subtract 0.01 from the highest value of each price range__
 
 ![](http://4.bp.blogspot.com/-ubCE1QQ-XSs/UHkh7AbIvBI/AAAAAAAALMg/dACSlC0T6Xw/s1600/price-ranges.png)
+
 This option is only available if you choose "Manual" for "Price Navigation Step Calculation".
 
 You have to stick to this format:
@@ -36,6 +37,7 @@ You have to stick to this format:
 Leaving this field empty means stay with the Magento basic behavior for manual calculation.
 
 ![](http://1.bp.blogspot.com/-IySUPzoaAls/UHkijgjwwPI/AAAAAAAALMo/f0oaG3zQzKo/s1600/substract-001.png)
+
 This option is available regardless of the value you choose for "Price Navigation Step Calculation".
 * Select "Yes" to stay with the Magento basic behavior
 * Select "No" to disable subtraction of 0.01
