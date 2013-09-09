@@ -100,10 +100,10 @@ extends Mage_Catalog_Model_Layer_Filter_Price
                     {
                         $gcd = gcd($min, $max);
                     }
-					else
-					{
-						throw new Exception('GCD function is missing!');
-					}
+                    else
+                    {
+                        throw new Exception('GCD function is missing!');
+                    }
                     
                     $counts = $this->getRangeItemCounts($gcd);
 
