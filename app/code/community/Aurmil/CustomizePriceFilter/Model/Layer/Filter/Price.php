@@ -1,5 +1,43 @@
 <?php
 
+if ((!extension_loaded('gmp') || !function_exists('gmp_gcd')) && !function_exists('gcd'))
+{
+    function gcd($a, $b)
+    {
+        $a = abs((int)$a);
+        $b = abs((int)$b);
+
+        if ((0 == $a) || (0 == $b))
+        {
+            $gcd = 1;
+        }
+        elseif ($a == $b)
+        {
+            $gcd = $a;
+        }
+        else
+        {
+            if ($a < $b)
+            {
+                $rest = $a;
+                $a = $b;
+                $b = $rest;
+            }
+
+            do
+            {
+                $rest = $a % $b;
+                $a = $b;
+                $b = $rest;
+            } while (0 !== $rest);
+
+            $gcd = $a;
+        }
+
+        return $gcd;
+    }
+}
+
 class Aurmil_CustomizePriceFilter_Model_Layer_Filter_Price
 extends Mage_Catalog_Model_Layer_Filter_Price
 {
@@ -54,7 +92,19 @@ extends Mage_Catalog_Model_Layer_Filter_Price
                     $min = min($range);
                     $max = max($range);
 
-                    $gcd = gmp_strval(gmp_gcd($min, $max));
+                    if (extension_loaded('gmp') && function_exists('gmp_gcd'))
+                    {
+                        $gcd = gmp_strval(gmp_gcd($min, $max));
+                    }
+                    elseif (function_exists('gcd'))
+                    {
+                        $gcd = gcd($min, $max);
+                    }
+					else
+					{
+						throw new Exception('GCD function is missing!');
+					}
+                    
                     $counts = $this->getRangeItemCounts($gcd);
 
                     $count = 0;
