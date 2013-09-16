@@ -20,14 +20,14 @@ Just download the "app" folder and paste it into the root directory of your Mage
 
 No Magento files will be modified but class "Mage_Catalog_Model_Layer_Filter_Price" will be extended.
 
-Note: this extension requires the __[GNU MP PHP extension](http://www.php.net/manual/en/book.gmp.php)__ to calculate GCD. If you are not able to use this library, get [this class](http://aurelien-dev-notes.blogspot.fr/2012/07/php-calcul-du-plus-grand-commun-diviseur.html) and put it into __/lib/Aurmil/Math.php__. Then replace "$gcd = gmp_strval(gmp_gcd($min, $max));" with "$gcd = Aurmil_Math::gcd($min, $max);" in __Price.php__.
-
 ## Usage
 In __System > Configuration > Catalog > Catalog > Layered Navigation__, this extension adds two new options: __Price Ranges__ and __Subtract 0.01 from the highest value of each price range__
 
 ![](http://4.bp.blogspot.com/-ubCE1QQ-XSs/UHkh7AbIvBI/AAAAAAAALMg/dACSlC0T6Xw/s1600/price-ranges.png)
 
 This option is only available if you choose "Manual" for "Price Navigation Step Calculation".
+
+Note : on the screenshot you see a ";" at the end of the field. This is just because the value continues on the right, this is not the last character.
 
 You have to stick to this format:
 * ; separates prices ranges
