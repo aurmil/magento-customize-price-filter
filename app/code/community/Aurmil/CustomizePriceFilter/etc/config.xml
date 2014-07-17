@@ -12,7 +12,7 @@
             </aurmil_customizepricefilter>
             <catalog>
                 <rewrite>
-                    <layer_filter_price>Aurmil_CustomizePriceFilter_Model_Layer_Filter_Price</layer_filter_price>
+                    <layer_filter_price>Aurmil_CustomizePriceFilter_Model_Catalog_Layer_Filter_Price</layer_filter_price>
                 </rewrite>
             </catalog>
         </models>

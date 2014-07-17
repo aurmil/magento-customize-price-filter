@@ -32,7 +32,7 @@ if ((!extension_loaded('gmp') || !function_exists('gmp_gcd'))
     }
 }
 
-class Aurmil_CustomizePriceFilter_Model_Layer_Filter_Price
+class Aurmil_CustomizePriceFilter_Model_Catalog_Layer_Filter_Price
 extends Mage_Catalog_Model_Layer_Filter_Price
 {
     protected function _getItemsData()

@@ -1,6 +1,6 @@
 <?php
 
-class Aurmil_CustomizePriceFilter_Model_Adminhtml_System_Config_Backend_Price_Ranges
+class Aurmil_CustomizePriceFilter_Model_System_Config_Backend_Price_Ranges
 extends Mage_Core_Model_Config_Data
 {
     public function save()
