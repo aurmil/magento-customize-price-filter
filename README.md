@@ -8,7 +8,7 @@ Another point is that Magento subtracts 0.01 to the highest value of each price 
 This extension allows you to set the exact price ranges you need and to disable subtraction of 0.01.
 
 ## Compatibility
-Tested on Magento CE 1.6.2.0 and 1.7.0.2
+Tested on Magento CE 1.6 - 1.7
 
 Michele Marcucci forked v1.0 of this module to make a [compatibility fix for Magento CE 1.5](https://github.com/michelem09/MagentoCustomizePriceFilter).
 
@@ -20,18 +20,19 @@ Michele Marcucci forked v1.0 of this module to make a [compatibility fix for Mag
 ## Installation
 Just download the "app" folder and paste it into the root directory of your Magento application. It will be merged with the existing "app" folder.
 
-No Magento files will be modified but class "Mage_Catalog_Model_Layer_Filter_Price" will be extended.
+No Magento files will be modified but class __Mage\_Catalog\_Model\_Layer\_Filter\_Price__ will be extended and some of its methods overridden.
 
 ## Usage
 In __System > Configuration > Catalog > Catalog > Layered Navigation__, this extension adds two new options: __Price Ranges__ and __Subtract 0.01 from the highest value of each price range__
 
 ![](http://4.bp.blogspot.com/-ubCE1QQ-XSs/UHkh7AbIvBI/AAAAAAAALMg/dACSlC0T6Xw/s1600/price-ranges.png)
 
-This option is only available if you choose "Manual" for "Price Navigation Step Calculation".
+This option is only available if you choose __Manual__ for __Price Navigation Step Calculation__.
 
-Note : on the screenshot you see a ";" at the end of the field. This is just because the value continues on the right, this is not the last character.
+__Note about the screenshot:__ you can see a semicolon at the end of the field. This is just because the value continues on the right, this is not the last character.
 
 You have to stick to this format:
+
 * ; separates prices ranges
 * - separates min and max values of a given range
 * min value of the first range and max value of the last range are optional. Magento will respectively display "Under [max1]" and "[minN] and above".
@@ -40,8 +41,9 @@ Leaving this field empty means stay with the Magento basic behavior for manual c
 
 ![](http://1.bp.blogspot.com/-IySUPzoaAls/UHkijgjwwPI/AAAAAAAALMo/f0oaG3zQzKo/s1600/substract-001.png)
 
-This option is available regardless of the value you choose for "Price Navigation Step Calculation".
-* Select "Yes" to stay with the Magento basic behavior
+This option is available regardless of the value set for __Price Navigation Step Calculation__.
+
+* Select "Yes" (default value) to stay with the Magento basic behavior
 * Select "No" to disable subtraction of 0.01
 
 ## Changelog
