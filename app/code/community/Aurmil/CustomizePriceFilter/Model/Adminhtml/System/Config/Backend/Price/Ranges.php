@@ -5,9 +5,12 @@ extends Mage_Core_Model_Config_Data
 {
     public function save()
     {
-        if (!preg_match('#^(\d+)?\-\d+;(\d+\-\d+;)*\d+\-(\d+)?$#', $this->getValue()))
-        {
-            Mage::throwException(Mage::helper('aurmil_customizepricefilter')->__("Provided Layered Navigation Price Ranges are incorrect."));
+        $pattern = '#^(\d+)?\-\d+;(\d+\-\d+;)*\d+\-(\d+)?$#';
+    
+        if (!preg_match($pattern, $this->getValue())) {
+            $message = "Provided Layered Navigation Price Ranges are incorrect.";
+            $message = Mage::helper('aurmil_customizepricefilter')->__($message);
+            Mage::throwException($message);
         }
 
         return parent::save();
