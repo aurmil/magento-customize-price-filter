@@ -8,7 +8,11 @@ if ((!extension_loaded('gmp') || !function_exists('gmp_gcd'))
         $a = abs((int)$a);
         $b = abs((int)$b);
 
-        if ((0 === $a) || (0 === $b)) {
+        if ((0 === $a) && (0 === $b)) {
+            $gcd = 0;
+        } elseif ((0 === $a) || (0 === $b)) {
+            $gcd = max($a, $b);
+        } elseif ((1 === $a) || (1 === $b)) {
             $gcd = 1;
         } elseif ($a === $b) {
             $gcd = $a;
