@@ -8,9 +8,9 @@ Another point is that Magento subtracts 0.01 to the highest value of each price 
 This extension allows you to set the exact price ranges you need and to disable subtraction of 0.01.
 
 ## Compatibility
-Tested on Magento CE 1.7
+Tested on Magento CE 1.6 - 1.7
 
-Michele Marcucci forked v1.0 of this module to make a [compatibility fix for Magento CE 1.5](https://github.com/michelem09/MagentoCustomizePriceFilter).
+Michele Marcucci forked v1.0 of this module to make a [compatibility fix for Magento CE 1.5](https://github.com/michelem09/MagentoCustomizePriceFilter). Current version of this module should be already compatible (not tested).
 
 ## Notes
 * Free and open source
@@ -20,7 +20,10 @@ Michele Marcucci forked v1.0 of this module to make a [compatibility fix for Mag
 ## Installation
 Just download the "app" folder and paste it into the root directory of your Magento application. It will be merged with the existing "app" folder.
 
-No Magento files will be modified but class __Mage\_Catalog\_Model\_Layer\_Filter\_Price__ will be extended and some of its methods overridden.
+No Magento files will be modified but following classes will be extended and some of their methods overridden:
+
+* Mage\_Catalog\_Model\_Layer\_Filter\_Price
+* Mage\_Catalog\_Model\_Resource\_Layer\_Filter\_Price
 
 ## Usage
 In __System > Configuration > Catalog > Catalog > Layered Navigation__, this extension adds two new options: __Price Ranges__ and __Subtract 0.01 from the highest value of each price range__
@@ -47,6 +50,9 @@ This option is available regardless of the value set for __Price Navigation Step
 * Select "No" to disable subtraction of 0.01
 
 ## Changelog
+### 1.2
+* Magento CE 1.6 compatibility
+
 ### 1.1
 * some minor corrections
 

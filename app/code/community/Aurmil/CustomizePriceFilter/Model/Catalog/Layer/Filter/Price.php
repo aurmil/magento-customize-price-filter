@@ -80,7 +80,7 @@ extends Mage_Catalog_Model_Layer_Filter_Price
                     } else {
                         $gcd = gcd($min, $max);
                     }
-                    
+
                     $counts = $this->getRangeItemCounts($gcd);
 
                     $count = 0;
@@ -93,7 +93,7 @@ extends Mage_Catalog_Model_Layer_Filter_Price
 
                 if (0 < $count) {
                     $range = explode('-', $priceRange);
-                    
+
                     $data[] = array(
                         'label' => $this->_renderRangeLabel($range[0], $range[1]),
                         'value' => $priceRange,
@@ -112,27 +112,75 @@ extends Mage_Catalog_Model_Layer_Filter_Price
     {
         $store = Mage::app()->getStore();
         $formattedFromPrice = $store->formatPrice($fromPrice);
-        
+
         if ('' === $fromPrice) {
             $toPrice = $store->formatPrice($toPrice);
-            $label = Mage::helper('aurmil_customizepricefilter')->__('Under %s', $toPrice);
+            $helper = Mage::helper('aurmil_customizepricefilter');
+            $label = $helper->__('Under %s', $toPrice);
             return $label;
         } elseif ('' === $toPrice) {
-            $label = Mage::helper('catalog')->__('%s and above', $formattedFromPrice);
+            // this translation is missing in Magento < 1.7, so this module manages it on its own
+            $helper = Mage::helper('aurmil_customizepricefilter');
+            $label = $helper->__('%s and above', $formattedFromPrice);
             return $label;
         } elseif (($fromPrice == $toPrice)
             && $store->getConfig(self::XML_PATH_ONE_PRICE_INTERVAL)
         ) {
             return $formattedFromPrice;
         } else {
-            if (($fromPrice != $toPrice) 
+            if (($fromPrice != $toPrice)
                 && Mage::getStoreConfigFlag('catalog/layered_navigation/price_subtraction')
             ) {
                 $toPrice -= .01;
             }
             $toPrice = $store->formatPrice($toPrice);
-            $label = Mage::helper('catalog')->__('%s - %s', $formattedFromPrice, $toPrice);
+            $label = Mage::helper('catalog');
+            $label = $label->__('%s - %s', $formattedFromPrice, $toPrice);
             return $label;
+        }
+    }
+
+    public function apply(Zend_Controller_Request_Abstract $request, $filterBlock)
+    {
+        $version = Mage::getVersionInfo();
+
+        if ((int)$version['minor'] >= 7) {
+            return parent::apply($request, $filterBlock);
+        } else {
+            /**
+             * Filter must be string: $fromPrice-$toPrice
+             */
+            $filter = $request->getParam($this->getRequestVar());
+            if (!$filter) {
+                return $this;
+            }
+
+            $filter = explode('-', $filter);
+            if (count($filter) != 2) {
+                return $this;
+            }
+
+            foreach ($filter as $v) {
+                if (($v !== '' && $v !== '0' && (int)$v <= 0) 
+                    || is_infinite((int)$v)
+                ) {
+                    return $this;
+                }
+            }
+
+            list($from, $to) = $filter;
+
+            $this->setInterval(array($from, $to));
+
+            $this->_applyToCollection($from, $to);
+            $this->getLayer()->getState()->addFilter($this->_createItem(
+                $this->_renderRangeLabel(empty($from) ? 0 : $from, $to),
+                $filter
+            ));
+
+            $this->_items = array();
+
+            return $this;
         }
     }
 }

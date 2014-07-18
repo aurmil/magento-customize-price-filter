@@ -2,5 +2,6 @@
 "Format: ([min1])-[max1];[min2]-[max2];...;[minN]-([maxN]) - min1 and maxN are optional. Empty field means default Magento manual behavior.","Format : ([min1])-[max1];[min2]-[max2];...;[minN]-([maxN]) - min1 et maxN sont optionnels. Si le champ est laissé vide, utilise le calcul manuel par défaut de Magento."
 "Provided Layered Navigation Price Ranges are incorrect.","Le format des tranches de prix (Navigation par filtres) est incorrect."
 "Under %s","Moins de %s"
+"%s and above","%s et plus"
 "Subtract 0.01 from the highest value of each price range","Soustraire 0,01 de la valeur max de chaque tranche de prix"
 "Select Yes to keep Magento default behavior.","Choisir Oui pour garder le comportement par défaut de Magento."

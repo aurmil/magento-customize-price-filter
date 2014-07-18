@@ -2,7 +2,7 @@
 <config>
     <modules>
         <Aurmil_CustomizePriceFilter>
-            <version>1.1.0</version>
+            <version>1.2.0</version>
         </Aurmil_CustomizePriceFilter>
     </modules>
     <global>
@@ -15,6 +15,11 @@
                     <layer_filter_price>Aurmil_CustomizePriceFilter_Model_Catalog_Layer_Filter_Price</layer_filter_price>
                 </rewrite>
             </catalog>
+            <catalog_resource>
+                <rewrite>
+					<layer_filter_price>Aurmil_CustomizePriceFilter_Model_Catalog_Resource_Layer_Filter_Price</layer_filter_price>
+                </rewrite>
+            </catalog_resource>
         </models>
         <helpers>
             <aurmil_customizepricefilter>
