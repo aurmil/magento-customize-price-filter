@@ -8,7 +8,7 @@ Another point is that Magento subtracts 0.01 to the highest value of each price 
 This extension allows you to set the exact price ranges you need and to disable subtraction of 0.01.
 
 ## Compatibility
-Tested on Magento CE 1.6 - 1.7
+Tested on Magento CE 1.6 - 1.9
 
 Michele Marcucci forked v1.0 of this module to make a [compatibility fix for Magento CE 1.5](https://github.com/michelem09/MagentoCustomizePriceFilter). Current version of this module should be already compatible (not tested).
 
