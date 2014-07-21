@@ -8,15 +8,13 @@ if ((!extension_loaded('gmp') || !function_exists('gmp_gcd'))
         $a = abs((int)$a);
         $b = abs((int)$b);
 
-        if ((0 === $a) && (0 === $b)) {
-            $gcd = 0;
-        } elseif ((0 === $a) || (0 === $b)) {
+        if ((0 === $a) || (0 === $b)) {         // 0 and x => x
             $gcd = max($a, $b);
-        } elseif ((1 === $a) || (1 === $b)) {
+        } elseif ((1 === $a) || (1 === $b)) {   // 1 and x => 1
             $gcd = 1;
-        } elseif ($a === $b) {
+        } elseif ($a === $b) {                  // x and x => x
             $gcd = $a;
-        } else {
+        } else {                                // x and y
             if ($a < $b) {
                 $rest = $a;
                 $a = $b;
@@ -59,14 +57,14 @@ extends Mage_Catalog_Model_Layer_Filter_Price
                 $min = (int)$range[0];
                 $max = (int)$range[1];
 
-                if (0 === $min) { // 1. from 0 to x
+                if (0 === $min) {               // from 0 to x
                     $counts = $this->getRangeItemCounts($max);
 
                     $count = 0;
                     if (array_key_exists(1, $counts)) {
                         $count = $counts[1];
                     }
-                } elseif (0 === $max) { // 2. from x to infinite
+                } elseif (0 === $max) {         // from x to infinite
                     $counts = $this->getRangeItemCounts($min);
 
                     if (array_key_exists(1, $counts)) {
@@ -74,13 +72,13 @@ extends Mage_Catalog_Model_Layer_Filter_Price
                     }
 
                     $count = array_sum($counts);
-                } else { // 3. from x to y
+                } else {                        // from x to y
                     $range = array($min, $max);
                     $min = min($range);
                     $max = max($range);
 
                     if (extension_loaded('gmp') && function_exists('gmp_gcd')) {
-                        $gcd = gmp_strval(gmp_gcd($min, $max));
+                        $gcd = gmp_intval(gmp_gcd($min, $max));
                     } else {
                         $gcd = gcd($min, $max);
                     }
@@ -88,7 +86,7 @@ extends Mage_Catalog_Model_Layer_Filter_Price
                     $counts = $this->getRangeItemCounts($gcd);
 
                     $count = 0;
-                    for ($i = (($min / $gcd) + 1); ($i * $gcd) <= $max; $i++) {
+                    for ($i = ((int)($min / $gcd) + 1); ($i * $gcd) <= $max; $i++) {
                         if (array_key_exists($i, $counts)) {
                             $count += $counts[$i];
                         }
@@ -165,7 +163,7 @@ extends Mage_Catalog_Model_Layer_Filter_Price
             }
 
             foreach ($filter as $v) {
-                if (($v !== '' && $v !== '0' && (int)$v <= 0) 
+                if (($v !== '' && $v !== '0' && (int)$v <= 0)
                     || is_infinite((int)$v)
                 ) {
                     return $this;
