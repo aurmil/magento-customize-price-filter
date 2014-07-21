@@ -115,12 +115,18 @@ extends Mage_Catalog_Model_Layer_Filter_Price
         $store = Mage::app()->getStore();
         $formattedFromPrice = $store->formatPrice($fromPrice);
 
-        if ('' === $fromPrice) {
-            $toPrice = $store->formatPrice($toPrice);
+        if (($fromPrice != $toPrice)
+            && Mage::getStoreConfigFlag('catalog/layered_navigation/price_subtraction')
+        ) {
+            $toPrice -= .01;
+        }
+        $formattedToPrice = $store->formatPrice($toPrice);
+
+        if (0 === (int)$fromPrice) {
             $helper = Mage::helper('aurmil_customizepricefilter');
-            $label = $helper->__('Under %s', $toPrice);
+            $label = $helper->__('Under %s', $formattedToPrice);
             return $label;
-        } elseif ('' === $toPrice) {
+        } elseif (0 === (int)$toPrice) {
             // this translation is missing in Magento < 1.7, so this module manages it on its own
             $helper = Mage::helper('aurmil_customizepricefilter');
             $label = $helper->__('%s and above', $formattedFromPrice);
@@ -130,14 +136,8 @@ extends Mage_Catalog_Model_Layer_Filter_Price
         ) {
             return $formattedFromPrice;
         } else {
-            if (($fromPrice != $toPrice)
-                && Mage::getStoreConfigFlag('catalog/layered_navigation/price_subtraction')
-            ) {
-                $toPrice -= .01;
-            }
-            $toPrice = $store->formatPrice($toPrice);
-            $label = Mage::helper('catalog');
-            $label = $label->__('%s - %s', $formattedFromPrice, $toPrice);
+            $helper = Mage::helper('catalog');
+            $label = $helper->__('%s - %s', $formattedFromPrice, $formattedToPrice);
             return $label;
         }
     }
