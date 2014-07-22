@@ -42,19 +42,39 @@ if ((!extension_loaded('gmp') || !function_exists('gmp_gcd'))
 class Aurmil_CustomizePriceFilter_Model_Catalog_Layer_Filter_Price
 extends Mage_Catalog_Model_Layer_Filter_Price
 {
-    protected function _getItemsData()
+    const XML_PATH_PRICE_RANGES = 'catalog/layered_navigation/price_ranges';
+
+    protected function _getPriceRanges()
     {
-        $priceRanges = Mage::getStoreConfig('catalog/layered_navigation/price_ranges');
+        $key = 'price_ranges';
+        $ranges = $this->getData($key);
+        if (is_null($ranges)) {
+            $ranges = Mage::getStoreConfig(self::XML_PATH_PRICE_RANGES);
+            $this->setData($key, $ranges);
+        }
+
+        return $ranges;
+    }
+
+    protected function _usePriceRanges()
+    {
+        $priceRanges = $this->_getPriceRanges();
         $calculationMode = Mage::getStoreConfig(self::XML_PATH_RANGE_CALCULATION);
         $manualMode = self::RANGE_CALCULATION_MANUAL;
 
-        if (('' != $priceRanges) && ($manualMode == $calculationMode)) {
+        return (('' != $priceRanges) && ($manualMode == $calculationMode));
+    }
+
+    protected function _getItemsData()
+    {
+        if ($this->_usePriceRanges()) {
             $data = array();
 
             if ($this->getInterval()) {
                 return $data;
             }
 
+            $priceRanges = $this->_getPriceRanges();
             $priceRanges = explode(';', $priceRanges);
 
             foreach ($priceRanges as $priceRange) {
@@ -189,5 +209,35 @@ extends Mage_Catalog_Model_Layer_Filter_Price
 
             return $this;
         }
+    }
+
+    public function getRangeItemCounts($range)
+    {
+        $rangeKey = 'range_item_counts_' . $range;
+        $items = $this->getData($rangeKey);
+        if (is_null($items)) {
+            $items = $this->_getResource()->getCount($this, $range);
+
+            if (defined('self::XML_PATH_RANGE_MAX_INTERVALS') && !$this->_usePriceRanges()) {
+                // checking max number of intervals
+                $i = 0;
+                $lastIndex = null;
+                $maxIntervalsNumber = $this->getMaxIntervalsNumber();
+                $calculation = Mage::app()->getStore()->getConfig(self::XML_PATH_RANGE_CALCULATION);
+                foreach ($items as $k => $v) {
+                    ++$i;
+                    if ($calculation == self::RANGE_CALCULATION_MANUAL && $i > 1 && $i > $maxIntervalsNumber) {
+                        $items[$lastIndex] += $v;
+                        unset($items[$k]);
+                    } else {
+                        $lastIndex = $k;
+                    }
+                }
+            }
+
+            $this->setData($rangeKey, $items);
+        }
+
+        return $items;
     }
 }

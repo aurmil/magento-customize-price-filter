@@ -50,6 +50,9 @@ This option is available regardless of the value set for __Price Navigation Step
 * Select "No" to disable subtraction of 0.01
 
 ## Changelog
+### 1.4
+* Fix for product count, with "Maximum Number of Price Intervals"
+
 ### 1.3
 * Magento CE 1.8 and 1.9 compatibility checked
 * Various minor changes and fixes
