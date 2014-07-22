@@ -1,5 +1,10 @@
 <?php
 
+/**
+ * @author     Aurélien Millet
+ * @link       https://github.com/aurmil/
+ */
+
 if ((!extension_loaded('gmp') || !function_exists('gmp_gcd'))
     && !function_exists('gcd')
 ) {

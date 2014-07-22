@@ -1,5 +1,10 @@
 <?php
 
+/**
+ * @author     Aurélien Millet
+ * @link       https://github.com/aurmil/
+ */
+
 class Aurmil_CustomizePriceFilter_Model_System_Config_Backend_Price_Ranges
 extends Mage_Core_Model_Config_Data
 {

@@ -1,5 +1,10 @@
 <?php
 
+/**
+ * @author     Aurélien Millet
+ * @link       https://github.com/aurmil/
+ */
+
 class Aurmil_CustomizePriceFilter_Model_Catalog_Resource_Layer_Filter_Price
 extends Mage_Catalog_Model_Resource_Layer_Filter_Price
 {
