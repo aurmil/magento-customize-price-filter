@@ -56,7 +56,7 @@ extends Mage_Catalog_Model_Layer_Filter_Price
         return $ranges;
     }
 
-    protected function _usePriceRanges()
+    public function usePriceRanges()
     {
         $priceRanges = $this->_getPriceRanges();
         $calculationMode = Mage::getStoreConfig(self::XML_PATH_RANGE_CALCULATION);
@@ -67,7 +67,7 @@ extends Mage_Catalog_Model_Layer_Filter_Price
 
     protected function _getItemsData()
     {
-        if ($this->_usePriceRanges()) {
+        if ($this->usePriceRanges()) {
             $data = array();
 
             if ($this->getInterval()) {
@@ -171,7 +171,7 @@ extends Mage_Catalog_Model_Layer_Filter_Price
     {
         $version = Mage::getVersionInfo();
 
-        if ((int)$version['minor'] >= 7) {
+        if (!$this->usePriceRanges() || (int)$version['minor'] >= 7) {
             return parent::apply($request, $filterBlock);
         } else {
             /**
@@ -218,7 +218,7 @@ extends Mage_Catalog_Model_Layer_Filter_Price
         if (is_null($items)) {
             $items = $this->_getResource()->getCount($this, $range);
 
-            if (defined('self::XML_PATH_RANGE_MAX_INTERVALS') && !$this->_usePriceRanges()) {
+            if (defined('self::XML_PATH_RANGE_MAX_INTERVALS') && !$this->usePriceRanges()) {
                 // checking max number of intervals
                 $i = 0;
                 $lastIndex = null;

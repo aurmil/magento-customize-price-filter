@@ -10,6 +10,10 @@ extends Mage_Catalog_Model_Resource_Layer_Filter_Price
 {
     public function applyFilterToCollection($filter, $from, $to)
     {
+        if (!method_exists($filter, 'usePriceRanges') || !$filter->usePriceRanges()) {
+            return parent::applyFilterToCollection($filter, $from, $to);
+        }
+
         if (('' === $from) && ('' === $to)) {
             return $this;
         }
