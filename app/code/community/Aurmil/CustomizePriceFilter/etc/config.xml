@@ -2,10 +2,31 @@
 <config>
     <modules>
         <Aurmil_CustomizePriceFilter>
-            <version>1.4.0</version>
+            <version>2.0.0</version>
         </Aurmil_CustomizePriceFilter>
     </modules>
     <global>
+        <resources>
+            <aurmil_customizepricefilter_setup>
+                <setup>
+                    <module>Aurmil_CustomizePriceFilter</module>
+                    <class>Mage_Catalog_Model_Resource_Setup</class>
+                </setup>
+                <connection>
+                    <use>core_setup</use>
+                </connection>
+            </aurmil_customizepricefilter_setup>
+            <aurmil_customizepricefilter_write>
+                <connection>
+                    <use>core_write</use>
+                </connection>
+            </aurmil_customizepricefilter_write>
+            <aurmil_customizepricefilter_read>
+                <connection>
+                    <use>core_read</use>
+                </connection>
+            </aurmil_customizepricefilter_read>
+        </resources>
         <models>
             <aurmil_customizepricefilter>
                 <class>Aurmil_CustomizePriceFilter_Model</class>
@@ -26,6 +47,11 @@
                 <class>Aurmil_CustomizePriceFilter_Helper</class>
             </aurmil_customizepricefilter>
         </helpers>
+        <blocks>
+            <aurmil_customizepricefilter>
+                <class>Aurmil_CustomizePriceFilter_Block</class>
+            </aurmil_customizepricefilter>
+        </blocks>
     </global>
     <adminhtml>
         <translate>

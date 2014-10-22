@@ -10,7 +10,7 @@
                             <comment><![CDATA[Format: ([min1])-[max1];[min2]-[max2];...;[minN]-([maxN]) - min1 and maxN are optional. Empty field means default Magento manual behavior.]]></comment>
                             <frontend_type>text</frontend_type>
                             <validate>validate-no-html-tags</validate>
-                            <backend_model>aurmil_customizepricefilter/system_config_backend_price_ranges</backend_model>
+                            <backend_model>aurmil_customizepricefilter/system_config_backend_priceranges</backend_model>
                             <depends>
                                 <price_range_calculation>manual</price_range_calculation>
                             </depends>

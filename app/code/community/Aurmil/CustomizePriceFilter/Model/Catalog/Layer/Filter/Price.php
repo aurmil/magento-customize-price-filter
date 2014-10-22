@@ -49,7 +49,14 @@ extends Mage_Catalog_Model_Layer_Filter_Price
         $key = 'price_ranges';
         $ranges = $this->getData($key);
         if (is_null($ranges)) {
-            $ranges = Mage::getStoreConfig(self::XML_PATH_PRICE_RANGES);
+            if (Mage::registry('current_category')) {
+                $ranges = Mage::registry('current_category')->getFilterPriceRanges();
+            }
+
+            if (!$ranges) {
+                $ranges = Mage::getStoreConfig(self::XML_PATH_PRICE_RANGES);
+            }
+
             $this->setData($key, $ranges);
         }
 

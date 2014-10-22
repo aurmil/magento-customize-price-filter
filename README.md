@@ -49,7 +49,18 @@ This option is available regardless of the value set for __Price Navigation Step
 * Select "Yes" (default value) to stay with the Magento basic behavior
 * Select "No" to disable subtraction of 0.01
 
+In __Catalog > Manage Categories__, this extension adds a new category attribute: __Price Ranges__ in the __Display Settings__ tab panel.
+
+![](http://1.bp.blogspot.com/-tpY23PoFlSs/VEe393Ml79I/AAAAAAAARyo/mWC7SL9yc6o/s1600/display-settings.png)
+
+This attribute allows you to override the price ranges configuration option for each catalog category. It will be considered when browsing the corresponding category frontend page.
+
+Leaving this field empty means using the price ranges configuration option.
+
 ## Changelog
+### 2.0
+* Add possibility to set price ranges per catalog category
+
 ### 1.4
 * Fix for product count, with "Maximum Number of Price Intervals"
 
