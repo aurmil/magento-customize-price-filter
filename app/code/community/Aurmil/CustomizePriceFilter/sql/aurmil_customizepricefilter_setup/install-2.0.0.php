@@ -42,4 +42,8 @@ $this->addAttributeToGroup(
     $entityAttribute['sort_order'] + 1
 );
 
+Mage::getModel('index/indexer')
+    ->getProcessByCode('catalog_category_flat')
+    ->changeStatus(Mage_Index_Model_Process::STATUS_REQUIRE_REINDEX);
+
 $this->endSetup();
