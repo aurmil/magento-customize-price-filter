@@ -27,7 +27,7 @@ extends Mage_Catalog_Model_Resource_Layer_Filter_Price
             $priceExpr  = new Zend_Db_Expr("(({$table}.min_price {$additional}) * {$rate})");
 
             if ('' !== $to) {
-                $to = (int)$to;
+                $to = (int) $to;
                 if ($from == $to) {
                     $to += 1;
                 }
@@ -86,7 +86,7 @@ extends Mage_Catalog_Model_Resource_Layer_Filter_Price
         $priceExpr = $this->_getPriceExpression($filter, $select, false);
 
         if ($to !== '') {
-            $to = (float)$to;
+            $to = (float) $to;
             if ($from == $to) {
                 $to += self::MIN_POSSIBLE_PRICE;
             }
@@ -104,6 +104,5 @@ extends Mage_Catalog_Model_Resource_Layer_Filter_Price
         }
 
         return $this;
-
     }
 }

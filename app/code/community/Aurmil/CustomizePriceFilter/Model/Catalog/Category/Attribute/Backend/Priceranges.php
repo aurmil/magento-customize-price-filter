@@ -11,7 +11,7 @@ extends Mage_Eav_Model_Entity_Attribute_Backend_Abstract
     /**
      * Validate object
      *
-     * @param Varien_Object $object
+     * @param  Varien_Object      $object
      * @throws Mage_Eav_Exception
      * @return boolean
      */

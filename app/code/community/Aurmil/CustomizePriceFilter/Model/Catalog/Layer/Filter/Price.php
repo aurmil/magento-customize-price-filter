@@ -10,8 +10,8 @@ if ((!extension_loaded('gmp') || !function_exists('gmp_gcd'))
 ) {
     function gcd($a, $b)
     {
-        $a = abs((int)$a);
-        $b = abs((int)$b);
+        $a = abs((int) $a);
+        $b = abs((int) $b);
 
         if ((0 === $a) || (0 === $b)) {         // 0 and x => x
             $gcd = max($a, $b);
@@ -86,8 +86,8 @@ extends Mage_Catalog_Model_Layer_Filter_Price
 
             foreach ($priceRanges as $priceRange) {
                 $range = explode('-', $priceRange);
-                $min = (int)$range[0];
-                $max = (int)$range[1];
+                $min = (int) $range[0];
+                $max = (int) $range[1];
 
                 if (0 === $min) {               // from 0 to x
                     $counts = $this->getRangeItemCounts($max);
@@ -118,7 +118,7 @@ extends Mage_Catalog_Model_Layer_Filter_Price
                     $counts = $this->getRangeItemCounts($gcd);
 
                     $count = 0;
-                    for ($i = ((int)($min / $gcd) + 1); ($i * $gcd) <= $max; $i++) {
+                    for ($i = ((int) ($min / $gcd) + 1); ($i * $gcd) <= $max; $i++) {
                         if (array_key_exists($i, $counts)) {
                             $count += $counts[$i];
                         }
@@ -131,7 +131,7 @@ extends Mage_Catalog_Model_Layer_Filter_Price
                     $data[] = array(
                         'label' => $this->_renderRangeLabel($range[0], $range[1]),
                         'value' => $priceRange,
-                        'count' => $count
+                        'count' => $count,
                     );
                 }
             }
@@ -154,14 +154,16 @@ extends Mage_Catalog_Model_Layer_Filter_Price
         }
         $formattedToPrice = $store->formatPrice($toPrice);
 
-        if (0 === (int)$fromPrice) {
+        if (0 === (int) $fromPrice) {
             $helper = Mage::helper('aurmil_customizepricefilter');
             $label = $helper->__('Under %s', $formattedToPrice);
+
             return $label;
-        } elseif (0 === (int)$toPrice) {
+        } elseif (0 === (int) $toPrice) {
             // this translation is missing in Magento < 1.7, so this module manages it on its own
             $helper = Mage::helper('aurmil_customizepricefilter');
             $label = $helper->__('%s and above', $formattedFromPrice);
+
             return $label;
         } elseif (($fromPrice == $toPrice)
             && $store->getConfig(self::XML_PATH_ONE_PRICE_INTERVAL)
@@ -170,6 +172,7 @@ extends Mage_Catalog_Model_Layer_Filter_Price
         } else {
             $helper = Mage::helper('catalog');
             $label = $helper->__('%s - %s', $formattedFromPrice, $formattedToPrice);
+
             return $label;
         }
     }
@@ -178,7 +181,7 @@ extends Mage_Catalog_Model_Layer_Filter_Price
     {
         $version = Mage::getVersionInfo();
 
-        if (!$this->usePriceRanges() || (int)$version['minor'] >= 7) {
+        if (!$this->usePriceRanges() || (int) $version['minor'] >= 7) {
             return parent::apply($request, $filterBlock);
         } else {
             /**
@@ -195,8 +198,8 @@ extends Mage_Catalog_Model_Layer_Filter_Price
             }
 
             foreach ($filter as $v) {
-                if (($v !== '' && $v !== '0' && (int)$v <= 0)
-                    || is_infinite((int)$v)
+                if (($v !== '' && $v !== '0' && (int) $v <= 0)
+                    || is_infinite((int) $v)
                 ) {
                     return $this;
                 }
