@@ -62,6 +62,8 @@ No Magento files will be modified but following classes will be extended and som
 }
 ```
 
+* Install or update your composer project dependencies
+
 ## Usage
 
 In __System > Configuration > Catalog > Catalog > Layered Navigation__, this extension adds two new options: __Price Ranges__ and __Subtract 0.01 from the highest value of each price range__
