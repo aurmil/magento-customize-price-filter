@@ -1,6 +1,7 @@
 # Magento - Customize Price Filter extension
 
 ## Overview
+
 Magento is able to display price ranges in the layered navigation. It offers 3 ways to calculate price step. But none of them allows to specify exactly the price ranges you want to see.
 
 Another point is that Magento subtracts 0.01 to the highest value of each price range when displaying them. I.e. if range is "100-200", Magento will display "100.00 - 199.99".
@@ -8,24 +9,36 @@ Another point is that Magento subtracts 0.01 to the highest value of each price 
 This extension allows you to set the exact price ranges you need and to disable subtraction of 0.01.
 
 ## Compatibility
+
 Tested on Magento CE 1.6 - 1.9
 
 Michele Marcucci forked v1.0 of this module to make a [compatibility fix for Magento CE 1.5](https://github.com/michelem09/MagentoCustomizePriceFilter). Current version of this module should be already compatible (not tested).
 
 ## Notes
+
 * Free and open source
 * Fully configurable
 * Bundled with English and French translations
 
 ## Installation
-Just download the "app" folder and paste it into the root directory of your Magento application. It will be merged with the existing "app" folder.
 
 No Magento files will be modified but following classes will be extended and some of their methods overridden:
 
 * Mage\_Catalog\_Model\_Layer\_Filter\_Price
 * Mage\_Catalog\_Model\_Resource\_Layer\_Filter\_Price
 
+### Manually
+
+* Download the latest version of this module [here](https://github.com/aurmil/magento-customize-price-filter/archive/master.zip)
+* Unzip it
+* Move the "app" folder into the root directory of your Magento application, it will be merged with the existing "app" folder
+
+### With modman
+
+* ```$ modman clone git@github.com:aurmil/magento-customize-price-filter.git```
+
 ## Usage
+
 In __System > Configuration > Catalog > Catalog > Layered Navigation__, this extension adds two new options: __Price Ranges__ and __Subtract 0.01 from the highest value of each price range__
 
 ![](http://4.bp.blogspot.com/-ubCE1QQ-XSs/UHkh7AbIvBI/AAAAAAAALMg/dACSlC0T6Xw/s1600/price-ranges.png)
@@ -58,21 +71,28 @@ This attribute allows you to override the price ranges configuration option for 
 Leaving this field empty means using the price ranges configuration option.
 
 ## Changelog
+
 ### 2.0
+
 * Add possibility to set price ranges per catalog category
 
 ### 1.4
+
 * Fix for product count, with "Maximum Number of Price Intervals"
 
 ### 1.3
+
 * Magento CE 1.8 and 1.9 compatibility checked
 * Various minor changes and fixes
 
 ### 1.2
+
 * Magento CE 1.6 compatibility
 
 ### 1.1
+
 * some minor corrections
 
 ### 1.0
+
 * initial release
