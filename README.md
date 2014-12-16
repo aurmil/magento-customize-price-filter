@@ -37,6 +37,30 @@ No Magento files will be modified but following classes will be extended and som
 
 * ```$ modman clone git@github.com:aurmil/magento-customize-price-filter.git```
 
+### With composer
+
+* Adapt the following "composer.json" file into yours:
+
+```
+{
+	"require": {
+		"aurmil/magento-customize-price-filter": "dev-master"
+	},
+    "repositories": [
+        {
+            "type": "composer",
+            "url": "http://packages.firegento.com"
+        },
+        {
+            "type": "vcs",
+            "url": "git://github.com/aurmil/magento-customize-price-filter"
+        }
+    ],
+	"extra": {
+		"magento-root-dir": "./"
+	}
+}```
+
 ## Usage
 
 In __System > Configuration > Catalog > Catalog > Layered Navigation__, this extension adds two new options: __Price Ranges__ and __Subtract 0.01 from the highest value of each price range__

@@ -1,11 +1,11 @@
 # code
-app/code/community/Aurmil/CustomizePriceFilter
+app/code/community/Aurmil/CustomizePriceFilter app/code/community/Aurmil/CustomizePriceFilter
 
 # module declaration
-app/etc/modules/Aurmil_CustomizePriceFilter.xml
+app/etc/modules/Aurmil_CustomizePriceFilter.xml app/etc/modules/Aurmil_CustomizePriceFilter.xml
 
 # English localization
-app/locale/en_US/Aurmil_CustomizePriceFilter.csv
+app/locale/en_US/Aurmil_CustomizePriceFilter.csv app/locale/en_US/Aurmil_CustomizePriceFilter.csv
 
 # French localization
-app/locale/fr_FR/Aurmil_CustomizePriceFilter.csv
+app/locale/fr_FR/Aurmil_CustomizePriceFilter.csv app/locale/fr_FR/Aurmil_CustomizePriceFilter.csv

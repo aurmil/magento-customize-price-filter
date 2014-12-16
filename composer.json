@@ -1,0 +1,17 @@
+{
+    "name": "aurmil/magento-customize-price-filter",
+    "description": "Magento - Customize Price Filter extension",
+    "type": "magento-module",
+    "keywords": ["price", "filter", "layered navigation"],
+    "homepage": "https://github.com/aurmil/magento-customize-price-filter",
+    "authors": [
+        {
+            "name": "Aurélien Millet",
+            "homepage": "http://www.aurelien-millet.fr/",
+            "role": "Developer"
+        }
+    ],
+    "require": {
+        "magento-hackathon/magento-composer-installer": "*"
+    }
+}
