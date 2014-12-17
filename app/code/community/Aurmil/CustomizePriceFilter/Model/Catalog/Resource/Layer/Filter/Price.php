@@ -22,7 +22,7 @@ extends Mage_Catalog_Model_Resource_Layer_Filter_Price
             $response   = $this->_dispatchPreparePriceEvent($filter, $select);
 
             $table      = $this->_getIndexTableAlias();
-            $additional = join('', $response->getAdditionalCalculations());
+            $additional = implode('', $response->getAdditionalCalculations());
             $rate       = $filter->getCurrencyRate();
             $priceExpr  = new Zend_Db_Expr("(({$table}.min_price {$additional}) * {$rate})");
 
@@ -54,7 +54,7 @@ extends Mage_Catalog_Model_Resource_Layer_Filter_Price
             $response   = $this->_dispatchPreparePriceEvent($filter, $select);
 
             $table      = $this->_getIndexTableAlias();
-            $additional = join('', $response->getAdditionalCalculations());
+            $additional = implode('', $response->getAdditionalCalculations());
             $rate       = $filter->getCurrencyRate();
             $priceExpr  = new Zend_Db_Expr("(({$table}.min_price {$additional}) * {$rate})");
 
