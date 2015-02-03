@@ -4,7 +4,6 @@
  * @author     Aurélien Millet
  * @link       https://github.com/aurmil/
  */
-
 class Aurmil_CustomizePriceFilter_Block_Adminhtml_Catalog_Category_Helper_Priceranges
 extends Varien_Data_Form_Element_Text
 {

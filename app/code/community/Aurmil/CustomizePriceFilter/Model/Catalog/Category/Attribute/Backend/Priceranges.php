@@ -4,7 +4,6 @@
  * @author     Aurélien Millet
  * @link       https://github.com/aurmil/
  */
-
 class Aurmil_CustomizePriceFilter_Model_Catalog_Category_Attribute_Backend_Priceranges
 extends Mage_Eav_Model_Entity_Attribute_Backend_Abstract
 {
