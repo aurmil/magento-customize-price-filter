@@ -1,4 +1,9 @@
 <?php
+/**
+ * @author Aurélien Millet
+ * @link https://github.com/aurmil/magento-customize-price-filter
+ * @license https://github.com/aurmil/magento-customize-price-filter/blob/master/LICENSE.md
+ */
 
 $this->startSetup();
 

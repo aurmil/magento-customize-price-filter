@@ -121,3 +121,7 @@ Leaving this field empty means using the price ranges configuration option.
 ### 1.0
 
 * initial release
+
+## License
+
+The MIT License (MIT). Please see [License File](https://github.com/aurmil/magento-customize-price-filter/blob/master/LICENSE.md) for more information.

@@ -11,6 +11,7 @@
     ],
     "homepage": "https://github.com/aurmil/magento-customize-price-filter",
     "type": "magento-module",
+    "license": "MIT",
     "require": {
         "magento-hackathon/magento-composer-installer": "*"
     }

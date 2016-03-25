@@ -1,9 +1,10 @@
 <?php
-
 /**
- * @author     Aurélien Millet
- * @link       https://github.com/aurmil/
+ * @author Aurélien Millet
+ * @link https://github.com/aurmil/magento-customize-price-filter
+ * @license https://github.com/aurmil/magento-customize-price-filter/blob/master/LICENSE.md
  */
+
 class Aurmil_CustomizePriceFilter_Model_Catalog_Category_Attribute_Backend_Priceranges
 extends Mage_Eav_Model_Entity_Attribute_Backend_Abstract
 {

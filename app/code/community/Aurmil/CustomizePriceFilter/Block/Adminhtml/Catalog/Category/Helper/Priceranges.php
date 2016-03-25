@@ -1,9 +1,10 @@
 <?php
-
 /**
- * @author     Aurélien Millet
- * @link       https://github.com/aurmil/
+ * @author Aurélien Millet
+ * @link https://github.com/aurmil/magento-customize-price-filter
+ * @license https://github.com/aurmil/magento-customize-price-filter/blob/master/LICENSE.md
  */
+
 class Aurmil_CustomizePriceFilter_Block_Adminhtml_Catalog_Category_Helper_Priceranges
 extends Varien_Data_Form_Element_Text
 {
