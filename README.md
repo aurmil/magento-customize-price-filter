@@ -1,4 +1,4 @@
-# Magento - Customize Price Filter extension
+# Magento - Customize price filter extension
 
 ## Overview
 
@@ -11,8 +11,6 @@ This extension allows you to set the exact price ranges you need and to disable 
 ## Compatibility
 
 Tested on Magento CE 1.6 - 1.9
-
-Michele Marcucci forked v1.0 of this module to make a [compatibility fix for Magento CE 1.5](https://github.com/michelem09/MagentoCustomizePriceFilter). Current version of this module should be already compatible (not tested).
 
 ## Notes
 
@@ -27,15 +25,15 @@ No Magento files will be modified but following classes will be extended and som
 * Mage\_Catalog\_Model\_Layer\_Filter\_Price
 * Mage\_Catalog\_Model\_Resource\_Layer\_Filter\_Price
 
+### With modman
+
+* ```$ modman clone git@github.com:aurmil/magento-customize-price-filter.git```
+
 ### Manually
 
 * Download the latest version of this module [here](https://github.com/aurmil/magento-customize-price-filter/archive/master.zip)
 * Unzip it
 * Move the "app" folder into the root directory of your Magento application, it will be merged with the existing "app" folder
-
-### With modman
-
-* ```$ modman clone git@github.com:aurmil/magento-customize-price-filter.git```
 
 ### With composer
 
@@ -43,9 +41,9 @@ No Magento files will be modified but following classes will be extended and som
 
 ```
 {
-	"require": {
-		"aurmil/magento-customize-price-filter": "dev-master"
-	},
+    "require": {
+        "aurmil/magento-customize-price-filter": "dev-master"
+    },
     "repositories": [
         {
             "type": "composer",
@@ -56,9 +54,9 @@ No Magento files will be modified but following classes will be extended and som
             "url": "git://github.com/aurmil/magento-customize-price-filter"
         }
     ],
-	"extra": {
-		"magento-root-dir": "./"
-	}
+    "extra": {
+        "magento-root-dir": "./"
+    }
 }
 ```
 
