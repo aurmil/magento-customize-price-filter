@@ -95,6 +95,12 @@ This attribute allows you to override the price ranges configuration option for 
 
 Leaving this field empty means using the price ranges configuration option.
 
+## Uninstall
+
+If you disable the module or completely remove the files, you will get an error as the catalog category attribute is still in DB and its backend model can not be found anymore.
+
+So remove "filter_price_ranges" attribute from "eav_attribute" table then clear caches, rebuild index and voilà.
+
 ## Changelog
 
 ### 2.0
