@@ -99,7 +99,7 @@ Leaving this field empty means using the price ranges configuration option.
 
 If you disable the module or completely remove the files, you will get an error as the catalog category attribute is still in DB and its backend model can not be found anymore.
 
-So remove "filter_price_ranges" attribute from "eav_attribute" table then clear caches, rebuild index and voilà.
+So remove "filter_price_ranges" attribute from "eav_attribute" table and "aurmil_customizepricefilter_setup" entry from "core_resource" table then clear caches, rebuild indexes and voilà.
 
 ## Changelog
 
