@@ -101,33 +101,6 @@ If you disable the module or completely remove the files, you will get an error 
 
 So remove "filter_price_ranges" attribute from "eav_attribute" table and "aurmil_customizepricefilter_setup" entry from "core_resource" table then clear caches, rebuild indexes and voilà.
 
-## Changelog
-
-### 2.0
-
-* Add possibility to set price ranges per catalog category
-
-### 1.4
-
-* Fix for product count, with "Maximum Number of Price Intervals"
-
-### 1.3
-
-* Magento CE 1.8 and 1.9 compatibility checked
-* Various minor changes and fixes
-
-### 1.2
-
-* Magento CE 1.6 compatibility
-
-### 1.1
-
-* some minor corrections
-
-### 1.0
-
-* initial release
-
 ## License
 
 The MIT License (MIT). Please see [License File](https://github.com/aurmil/magento-customize-price-filter/blob/master/LICENSE.md) for more information.
