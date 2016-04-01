@@ -9,10 +9,20 @@
 <config>
     <modules>
         <Aurmil_CustomizePriceFilter>
-            <version>2.0.0</version>
+            <version>1.6.0</version>
         </Aurmil_CustomizePriceFilter>
     </modules>
     <global>
+        <helpers>
+            <aurmil_customizepricefilter>
+                <class>Aurmil_CustomizePriceFilter_Helper</class>
+            </aurmil_customizepricefilter>
+        </helpers>
+        <blocks>
+            <aurmil_customizepricefilter>
+                <class>Aurmil_CustomizePriceFilter_Block</class>
+            </aurmil_customizepricefilter>
+        </blocks>
         <resources>
             <aurmil_customizepricefilter_setup>
                 <setup>
@@ -45,20 +55,10 @@
             </catalog>
             <catalog_resource>
                 <rewrite>
-					<layer_filter_price>Aurmil_CustomizePriceFilter_Model_Catalog_Resource_Layer_Filter_Price</layer_filter_price>
+                    <layer_filter_price>Aurmil_CustomizePriceFilter_Model_Catalog_Resource_Layer_Filter_Price</layer_filter_price>
                 </rewrite>
             </catalog_resource>
         </models>
-        <helpers>
-            <aurmil_customizepricefilter>
-                <class>Aurmil_CustomizePriceFilter_Helper</class>
-            </aurmil_customizepricefilter>
-        </helpers>
-        <blocks>
-            <aurmil_customizepricefilter>
-                <class>Aurmil_CustomizePriceFilter_Block</class>
-            </aurmil_customizepricefilter>
-        </blocks>
     </global>
     <adminhtml>
         <translate>
@@ -86,6 +86,7 @@
         <catalog>
             <layered_navigation>
                 <price_subtraction>1</price_subtraction>
+                <use_first_range_text>0</use_first_range_text>
             </layered_navigation>
         </catalog>
     </default>

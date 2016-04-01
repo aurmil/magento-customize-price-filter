@@ -42,212 +42,238 @@ if ((!extension_loaded('gmp') || !function_exists('gmp_gcd'))
 class Aurmil_CustomizePriceFilter_Model_Catalog_Layer_Filter_Price
 extends Mage_Catalog_Model_Layer_Filter_Price
 {
-    const XML_PATH_PRICE_RANGES = 'catalog/layered_navigation/price_ranges';
-
-    protected function _getPriceRanges()
-    {
-        $key = 'price_ranges';
-        $ranges = $this->getData($key);
-        if (is_null($ranges)) {
-            if (Mage::registry('current_category')) {
-                $ranges = Mage::registry('current_category')->getFilterPriceRanges();
-            }
-
-            if (!$ranges) {
-                $ranges = Mage::getStoreConfig(self::XML_PATH_PRICE_RANGES);
-            }
-
-            $this->setData($key, $ranges);
-        }
-
-        return $ranges;
-    }
-
-    public function usePriceRanges()
-    {
-        $priceRanges = $this->_getPriceRanges();
-        $calculationMode = Mage::getStoreConfig(self::XML_PATH_RANGE_CALCULATION);
-        $manualMode = self::RANGE_CALCULATION_MANUAL;
-
-        return (('' != $priceRanges) && ($manualMode == $calculationMode));
-    }
-
     protected function _getItemsData()
     {
-        if ($this->usePriceRanges()) {
-            $data = array();
+        // if custom price ranges not used => parent
+        if (!Mage::helper('aurmil_customizepricefilter')->usePriceRanges()) {
+            return parent::_getItemsData();
+        }
 
-            if ($this->getInterval()) {
-                return $data;
-            }
+        // an interval was applied in filters, we don't need the items list
+        if ($this->getInterval()) {
+            return array();
+        }
 
-            $priceRanges = $this->_getPriceRanges();
-            $priceRanges = explode(';', $priceRanges);
+        $ranges = Mage::helper('aurmil_customizepricefilter')->getPriceRanges();
+        $ranges = explode(';', $ranges);
+        $rangesCount = count($ranges);
+        $data   = array();
 
-            foreach ($priceRanges as $priceRange) {
-                $range = explode('-', $priceRange);
-                $min = (int) $range[0];
-                $max = (int) $range[1];
+        if ($rangesCount > 0) {
+            $useGMP = (extension_loaded('gmp') && function_exists('gmp_gcd'));
+            // check on parent class as self class defines the method _renderRangeLabel
+            $renderRangeLabel = method_exists(new Mage_Catalog_Model_Layer_Filter_Price, '_renderRangeLabel');
 
-                if (0 === $min) {               // from 0 to x
-                    $counts = $this->getRangeItemCounts($max);
+            foreach ($ranges as $k => $range) {
+                $prices = array_map('intval', explode('-', $range));
+                $fromPrice = $prices[0];
+                $toPrice = $prices[1];
+                $count = 0;
 
-                    $count = 0;
-                    if (array_key_exists(1, $counts)) {
-                        $count = $counts[1];
+                // needed by Aurmil_CustomizePriceFilter_Model_Catalog_Resource_Layer_Filter_Price::getCount()
+                $this->setData('currentRangePrices', $prices);
+
+                if (0 === $fromPrice && 0 < $toPrice && 0 === $k) { // from 0 to X, first range
+                    $dbRanges = $this->getRangeItemCounts($toPrice);
+
+                    if (array_key_exists(1, $dbRanges)) {
+                        $count = $dbRanges[1];
                     }
-                } elseif (0 === $max) {         // from x to infinite
-                    $counts = $this->getRangeItemCounts($min);
+                } elseif (0 < $fromPrice && 0 === $toPrice && ($rangesCount - 1) === $k) { // from X to infinite, last range
+                    $dbRanges = $this->getRangeItemCounts($fromPrice);
 
-                    if (array_key_exists(1, $counts)) {
-                        unset($counts[1]);
+                    if (array_key_exists(1, $dbRanges)) {
+                        unset($dbRanges[1]);
                     }
 
-                    $count = array_sum($counts);
-                } else {                        // from x to y
-                    $range = array($min, $max);
-                    $min = min($range);
-                    $max = max($range);
+                    $count = array_sum($dbRanges);
+                } elseif (0 < $fromPrice && $fromPrice === $toPrice) { // X = Y, X != 0
+                    $dbRanges = $this->getRangeItemCounts($fromPrice + 0.01);
 
-                    if (extension_loaded('gmp') && function_exists('gmp_gcd')) {
-                        $gcd = gmp_intval(gmp_gcd($min, $max));
-                    } else {
-                        $gcd = gcd($min, $max);
-                    }
+                    if (array_key_exists(1, $dbRanges)) {
+                        $count = $dbRanges[1];
 
-                    $counts = $this->getRangeItemCounts($gcd);
+                        $dbRanges = $this->getRangeItemCounts($fromPrice - 0.01);
 
-                    $count = 0;
-                    for ($i = ((int) ($min / $gcd) + 1); ($i * $gcd) <= $max; $i++) {
-                        if (array_key_exists($i, $counts)) {
-                            $count += $counts[$i];
+                        if (array_key_exists(1, $dbRanges)) {
+                            $count -= $dbRanges[1];
                         }
                     }
+                } elseif (0 < $fromPrice && 0 < $toPrice && $fromPrice < $toPrice) { // from X to Y, X < Y, X != 0, Y != 0
+                    if ($useGMP) {
+                        $gcd = gmp_intval(gmp_gcd($fromPrice, $toPrice));
+                    } else {
+                        $gcd = gcd($fromPrice, $toPrice);
+                    }
+
+                    $dbRanges = $this->getRangeItemCounts($gcd);
+
+                    for ($i = ((int) ($fromPrice / $gcd) + 1); ($i * $gcd) <= $toPrice; $i++) {
+                        if (array_key_exists($i, $dbRanges)) {
+                            $count += $dbRanges[$i];
+                        }
+                    }
+                } else {
+                    Mage::log('Customize Price Filter module: price range "'.$range.'" is invalid', Zend_Log::WARN);
                 }
 
                 if (0 < $count) {
-                    $range = explode('-', $priceRange);
+                    // we want strings, not integers as we previously had
+                    $prices = explode('-', $range);
+
+                    if ($renderRangeLabel) { // Magento CE >= 1.7
+                        $label = $this->_renderRangeLabel($prices[0], $prices[1]);
+                    } else { // Magento CE < 1.7
+                        $label = $this->_renderItemLabel($prices[0], $prices[1]);
+                    }
 
                     $data[] = array(
-                        'label' => $this->_renderRangeLabel($range[0], $range[1]),
-                        'value' => $priceRange,
+                        'label' => $label,
+                        'value' => $range,
                         'count' => $count,
                     );
                 }
             }
-
-            return $data;
         }
 
-        return parent::_getItemsData();
-    }
-
-    protected function _renderRangeLabel($fromPrice, $toPrice)
-    {
-        $store = Mage::app()->getStore();
-        $formattedFromPrice = $store->formatPrice($fromPrice);
-
-        if (($fromPrice != $toPrice)
-            && Mage::getStoreConfigFlag('catalog/layered_navigation/price_subtraction')
-        ) {
-            $toPrice -= .01;
-        }
-        $formattedToPrice = $store->formatPrice($toPrice);
-
-        if (0 === (int) $fromPrice) {
-            $helper = Mage::helper('aurmil_customizepricefilter');
-            $label = $helper->__('Under %s', $formattedToPrice);
-
-            return $label;
-        } elseif (0 === (int) $toPrice) {
-            // this translation is missing in Magento < 1.7, so this module manages it on its own
-            $helper = Mage::helper('aurmil_customizepricefilter');
-            $label = $helper->__('%s and above', $formattedFromPrice);
-
-            return $label;
-        } elseif (($fromPrice == $toPrice)
-            && $store->getConfig(self::XML_PATH_ONE_PRICE_INTERVAL)
-        ) {
-            return $formattedFromPrice;
-        } else {
-            $helper = Mage::helper('catalog');
-            $label = $helper->__('%s - %s', $formattedFromPrice, $formattedToPrice);
-
-            return $label;
-        }
-    }
-
-    public function apply(Zend_Controller_Request_Abstract $request, $filterBlock)
-    {
-        $version = Mage::getVersionInfo();
-
-        if (!$this->usePriceRanges() || (int) $version['minor'] >= 7) {
-            return parent::apply($request, $filterBlock);
-        } else {
-            /**
-             * Filter must be string: $fromPrice-$toPrice
-             */
-            $filter = $request->getParam($this->getRequestVar());
-            if (!$filter) {
-                return $this;
-            }
-
-            $filter = explode('-', $filter);
-            if (count($filter) != 2) {
-                return $this;
-            }
-
-            foreach ($filter as $v) {
-                if (($v !== '' && $v !== '0' && (int) $v <= 0)
-                    || is_infinite((int) $v)
-                ) {
-                    return $this;
-                }
-            }
-
-            list($from, $to) = $filter;
-
-            $this->setInterval(array($from, $to));
-
-            $this->_applyToCollection($from, $to);
-            $this->getLayer()->getState()->addFilter($this->_createItem(
-                $this->_renderRangeLabel(empty($from) ? 0 : $from, $to),
-                $filter
-            ));
-
-            $this->_items = array();
-
-            return $this;
-        }
+        return $data;
     }
 
     public function getRangeItemCounts($range)
     {
+        // if custom price ranges not used or Magento CE < 1.7 => parent
+        if (!Mage::helper('aurmil_customizepricefilter')->usePriceRanges()
+            || !method_exists($this, 'getMaxIntervalsNumber')
+        ) {
+            return parent::getRangeItemCounts($range);
+        }
+
+        // for Magento CE >= 1.7, parent's code
+        // but without checking max number of intervals
         $rangeKey = 'range_item_counts_' . $range;
         $items = $this->getData($rangeKey);
         if (is_null($items)) {
             $items = $this->_getResource()->getCount($this, $range);
-
-            if (defined('self::XML_PATH_RANGE_MAX_INTERVALS') && !$this->usePriceRanges()) {
-                // checking max number of intervals
-                $i = 0;
-                $lastIndex = null;
-                $maxIntervalsNumber = $this->getMaxIntervalsNumber();
-                $calculation = Mage::app()->getStore()->getConfig(self::XML_PATH_RANGE_CALCULATION);
-                foreach ($items as $k => $v) {
-                    ++$i;
-                    if ($calculation == self::RANGE_CALCULATION_MANUAL && $i > 1 && $i > $maxIntervalsNumber) {
-                        $items[$lastIndex] += $v;
-                        unset($items[$k]);
-                    } else {
-                        $lastIndex = $k;
-                    }
-                }
-            }
-
             $this->setData($rangeKey, $items);
         }
-
         return $items;
+    }
+
+    /**
+     * target is only Magento CE < 1.7
+     * to manage "fromPrice-toPrice" format instead of "index,range"
+     */
+    public function apply(Zend_Controller_Request_Abstract $request, $filterBlock)
+    {
+        // if custom price ranges not used or Magento CE >= 1.7 => parent
+        // test should be improved as getMaxIntervalsNumber method is not involved in the code below
+        if (!Mage::helper('aurmil_customizepricefilter')->usePriceRanges()
+            || method_exists($this, 'getMaxIntervalsNumber')
+        ) {
+            return parent::apply($request, $filterBlock);
+        }
+
+        // from Magento CE 1.6
+        $filter = $request->getParam($this->getRequestVar());
+        if (!$filter) {
+            return $this;
+        }
+        $filter = explode('-', $filter); // modification: , => -
+        if (count($filter) != 2) {
+            return $this;
+        }
+
+        // from Magento CE 1.9
+        foreach ($filter as $v) {
+            if (($v !== '' && $v !== '0' && (float)$v <= 0) || is_infinite((float)$v)) {
+                return $this;
+            }
+        }
+        list($from, $to) = $filter;
+        $this->setInterval(array($from, $to));
+
+        // from Magento CE 1.6/1.9
+        $this->_applyToCollection($from, $to);
+        $this->getLayer()->getState()->addFilter($this->_createItem(
+            $this->_renderItemLabel(empty($from) ? 0 : $from, $to),
+            $filter
+        ));
+
+        // from Magento CE 1.6
+        $this->_items = array();
+        return $this;
+    }
+
+    /**
+     * for Magento CE >= 1.7
+     */
+    protected function _renderRangeLabel($fromPrice, $toPrice)
+    {
+        $store      = Mage::app()->getStore();
+        $formattedFromPrice  = $store->formatPrice($fromPrice);
+        $helper = Mage::helper('aurmil_customizepricefilter');
+        $usePriceRanges = $helper->usePriceRanges();
+
+        $formattedToPrice = '';
+        if ($toPrice) {
+            $tmpToPrice = $toPrice;
+            if ($helper->usePriceSubstract()) {
+                $tmpToPrice -= .01;
+            }
+            $formattedToPrice = $store->formatPrice($tmpToPrice);
+        }
+
+        if (!$fromPrice && $toPrice
+            && $usePriceRanges && $helper->useFirstRangeText()
+        ) {
+            $label = $helper->__('Up to %s', $formattedToPrice);
+        } elseif ($fromPrice && !$toPrice) {
+            $label = Mage::helper('catalog')->__('%s and above', $formattedFromPrice);
+        } elseif ($fromPrice == $toPrice && Mage::app()->getStore()->getConfig(self::XML_PATH_ONE_PRICE_INTERVAL)) {
+            $label = $formattedFromPrice;
+        } else {
+            $label = Mage::helper('catalog')->__('%s - %s', $formattedFromPrice, $formattedToPrice);
+        }
+
+        return $label;
+    }
+
+    /**
+     * for Magento CE < 1.7
+     * changed parameters names
+     */
+    protected function _renderItemLabel($fromPrice, $toPrice)
+    {
+        $store      = Mage::app()->getStore();
+        $helper = Mage::helper('aurmil_customizepricefilter');
+        $usePriceRanges = $helper->usePriceRanges();
+
+        if (!$usePriceRanges) {
+            $range = $fromPrice;
+            $value = $toPrice;
+
+            $fromPrice  = ($value-1)*$range;
+            $toPrice    = $value*$range;
+        }
+
+        $formattedFromPrice  = $store->formatPrice($fromPrice);
+        $formattedToPrice    = $store->formatPrice($toPrice);
+
+        if (!$fromPrice && $toPrice
+            && $usePriceRanges && $helper->useFirstRangeText()
+        ) {
+            $label = $helper->__('Up to %s', $formattedToPrice);
+        } elseif ($fromPrice && !$toPrice && $usePriceRanges) {
+            // this translation does not exist in Magento CE < 1.7, so this module manages it on its own
+            $label = $helper->__('%s and above', $formattedFromPrice);
+        } /*elseif ($usePriceRanges
+            && $fromPrice == $toPrice
+        ) {
+            $label = $formattedFromPrice;
+        }*/ else {
+            $label = $helper->__('%s - %s', $formattedFromPrice, $formattedToPrice);
+        }
+
+        return $label;
     }
 }

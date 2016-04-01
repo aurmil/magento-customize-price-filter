@@ -8,70 +8,13 @@
 class Aurmil_CustomizePriceFilter_Model_Catalog_Resource_Layer_Filter_Price
 extends Mage_Catalog_Model_Resource_Layer_Filter_Price
 {
-    public function applyFilterToCollection($filter, $from, $to)
-    {
-        if (method_exists($filter, 'usePriceRanges') && $filter->usePriceRanges()) {
-            if (('' === $from) && ('' === $to)) {
-                return $this;
-            }
-
-            $collection = $filter->getLayer()->getProductCollection();
-            $collection->addPriceData($filter->getCustomerGroupId(), $filter->getWebsiteId());
-
-            $select     = $collection->getSelect();
-            $response   = $this->_dispatchPreparePriceEvent($filter, $select);
-
-            $table      = $this->_getIndexTableAlias();
-            $additional = implode('', $response->getAdditionalCalculations());
-            $rate       = $filter->getCurrencyRate();
-            $priceExpr  = new Zend_Db_Expr("(({$table}.min_price {$additional}) * {$rate})");
-
-            if ('' !== $to) {
-                $to = (int) $to;
-                if ($from == $to) {
-                    $to += 1;
-                }
-            }
-
-            if ('' !== $from) {
-                $select->where($priceExpr . ' >= ?', $from);
-            }
-            if ('' !== $to) {
-                if (Mage::getStoreConfigFlag('catalog/layered_navigation/price_subtraction')) {
-                    $select->where($priceExpr . ' < ?', $to);
-                } else {
-                    $select->where($priceExpr . ' <= ?', $to);
-                }
-            }
-        } else {
-            $range = $from;
-            $index = $to;
-
-            $collection = $filter->getLayer()->getProductCollection();
-            $collection->addPriceData($filter->getCustomerGroupId(), $filter->getWebsiteId());
-
-            $select     = $collection->getSelect();
-            $response   = $this->_dispatchPreparePriceEvent($filter, $select);
-
-            $table      = $this->_getIndexTableAlias();
-            $additional = implode('', $response->getAdditionalCalculations());
-            $rate       = $filter->getCurrencyRate();
-            $priceExpr  = new Zend_Db_Expr("(({$table}.min_price {$additional}) * {$rate})");
-
-            $select->where($priceExpr . ' >= ?', ($range * ($index - 1)));
-
-            if (Mage::getStoreConfigFlag('catalog/layered_navigation/price_subtraction')) {
-                $select->where($priceExpr . ' < ?', ($range * $index));
-            } else {
-                $select->where($priceExpr . ' <= ?', ($range * $index));
-            }
-        }
-
-        return $this;
-    }
-
+    /**
+     * for Magento CE >= 1.7
+     */
     public function applyPriceRange($filter)
     {
+        // parent's code
+
         $interval = $filter->getInterval();
         if (!$interval) {
             return $this;
@@ -86,7 +29,7 @@ extends Mage_Catalog_Model_Resource_Layer_Filter_Price
         $priceExpr = $this->_getPriceExpression($filter, $select, false);
 
         if ($to !== '') {
-            $to = (float) $to;
+            $to = (float)$to;
             if ($from == $to) {
                 $to += self::MIN_POSSIBLE_PRICE;
             }
@@ -96,13 +39,115 @@ extends Mage_Catalog_Model_Resource_Layer_Filter_Price
             $select->where($priceExpr . ' >= ' . $this->_getComparingValue($from, $filter));
         }
         if ($to !== '') {
-            if (Mage::getStoreConfigFlag('catalog/layered_navigation/price_subtraction')) {
-                $select->where($priceExpr . ' < ' . $this->_getComparingValue($to, $filter));
-            } else {
-                $select->where($priceExpr . ' <= ' . $to);
+            // only modification compared to parent's code
+            $operator = ' <= ';
+            $decrease = false;
+            if (Mage::helper('aurmil_customizepricefilter')->usePriceSubstract()) {
+                $operator = ' < ';
+                $decrease = true;
             }
+            $select->where($priceExpr . $operator . $this->_getComparingValue($to, $filter, $decrease));
         }
 
         return $this;
+    }
+
+    /**
+     * for Magento CE < 1.7
+     * changed parameters names
+     */
+    public function applyFilterToCollection($filter, $from, $to)
+    {
+        // we don't care of price substraction here (< 1.7) so
+        // if custom price ranges not used => parent
+        if (!Mage::helper('aurmil_customizepricefilter')->usePriceRanges()) {
+            return parent::applyFilterToCollection($filter, $from, $to);
+        }
+
+        // from Magento CE 1.9
+        if ($from === '' && $to === '') {
+            return $this;
+        }
+
+        // parent's code
+        $collection = $filter->getLayer()->getProductCollection();
+        $collection->addPriceData($filter->getCustomerGroupId(), $filter->getWebsiteId());
+        $select     = $collection->getSelect();
+        $response   = $this->_dispatchPreparePriceEvent($filter, $select);
+        $table      = $this->_getIndexTableAlias();
+        $additional = join('', $response->getAdditionalCalculations());
+        $rate       = $filter->getCurrencyRate();
+        $priceExpr  = new Zend_Db_Expr("(({$table}.min_price {$additional}) * {$rate})");
+
+        // modification compared to parent's code
+        if ($from !== '') {
+            $select->where($priceExpr . ' >= ?', $from);
+        }
+        if ($to !== '') {
+            $select->where($priceExpr . ' < ?', $to);
+        }
+
+        return $this;
+    }
+
+    public function getCount($filter, $range)
+    {
+        $counts = parent::getCount($filter, $range);
+
+        // if price substract not used and Magento CE >= 1.7
+        // check on parent class as self class defines the method applyPriceRange
+        if (!Mage::helper('aurmil_customizepricefilter')->usePriceSubstract()
+            && method_exists(new Mage_Catalog_Model_Resource_Layer_Filter_Price, 'applyPriceRange')
+        ) {
+            // products with price = range upper boundary
+            // won't be counted in the range items count
+            // so we have to count them in additionally
+
+            // we need to know the range upper price
+            if ($filter->hasData('currentRangePrices')
+                && $filter->getData('currentRangePrices')
+            ) {
+                $prices = $filter->getData('currentRangePrices');
+
+                // if prices are equals, count is already correct, 
+                // even if price is a range upper boundary
+                if ($prices[0] !== $prices[1]) {
+                    // parent's code
+                    $select = $this->_getSelect($filter);
+                    $priceExpression = $this->_getFullPriceExpression($filter, $select);
+                    $range = floatval($range);
+                    if ($range == 0) {
+                        $range = 1;
+                    }
+                    $countExpr = new Zend_Db_Expr('COUNT(*)');
+                    $rangeExpr = new Zend_Db_Expr("FLOOR(({$priceExpression}) / {$range})"); // modification
+                    $rangeOrderExpr = new Zend_Db_Expr("FLOOR(({$priceExpression}) / {$range}) + 1 ASC");
+                    $select->columns(array(
+                        'range' => $rangeExpr,
+                        'count' => $countExpr
+                    ));
+
+                    // modifications
+                    $select->group($rangeExpr);
+                    $select->where("MOD({$priceExpression}, {$prices[1]}) = 0");
+                    $counts2 = $this->_getReadAdapter()->fetchPairs($select);
+
+                    if (count($counts2)) {
+                        foreach ($counts2 as $i => $c) {
+                            if (!isset($counts[$i])) {
+                                $counts[$i] = 0;
+                            }
+
+                            $counts[$i] += $c;
+                        }
+
+                        // in case we added new key(s), sort array on keys to order them correctly
+                        ksort($counts);
+                    }
+                }
+            }
+        }
+
+        return $counts;
     }
 }
