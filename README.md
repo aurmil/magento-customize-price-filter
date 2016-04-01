@@ -64,7 +64,7 @@ No Magento files will be modified but following classes will be extended and som
 
 ## Usage
 
-In __System > Configuration > Catalog > Catalog > Layered Navigation__, this extension adds two new options: __Price Ranges__ and __Subtract 0.01 from the highest value of each price range__
+In __System > Configuration > Catalog > Catalog > Layered Navigation__, this extension adds three new options: __Subtract 0.01 from the highest value of each price range__, __Price Ranges__ and __Use text in first range label__
 
 ![](http://4.bp.blogspot.com/-ubCE1QQ-XSs/UHkh7AbIvBI/AAAAAAAALMg/dACSlC0T6Xw/s1600/price-ranges.png)
 
@@ -76,9 +76,13 @@ You have to stick to this format:
 
 * ; separates prices ranges
 * - separates min and max values of a given range
-* min value of the first range and max value of the last range are optional. Magento will respectively display "Under [max1]" and "[minN] and above".
+* min value of the first range and max value of the last range are optional. Magento will respectively display "Up to [max1]" (depending on the next option) and "[minN] and above".
 
 Leaving this field empty means stay with the Magento basic behavior for manual calculation.
+
+__Use text in first range label__ option allows you to display, for example, "Up to €99.99" instead of "€0.00 - €99.99" which is the default label Magento uses.
+
+The text/translation can be modified if needed in app/locale/xx_XX/Aurmil_CustomizePriceFilter.csv files.
 
 ![](http://1.bp.blogspot.com/-IySUPzoaAls/UHkijgjwwPI/AAAAAAAALMo/f0oaG3zQzKo/s1600/substract-001.png)
 
