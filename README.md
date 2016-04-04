@@ -82,7 +82,7 @@ Leaving this field empty means stay with the Magento basic behavior for manual c
 
 __Use text in first range label__ option allows you to display, for example, "Up to €99.99" instead of "€0.00 - €99.99" which is the default label Magento uses.
 
-The text/translation can be modified if needed in app/locale/xx_XX/Aurmil_CustomizePriceFilter.csv files.
+The text/translation can be modified if needed in __app/locale/xx_XX/Aurmil_CustomizePriceFilter.csv__ files.
 
 ![](http://1.bp.blogspot.com/-IySUPzoaAls/UHkijgjwwPI/AAAAAAAALMo/f0oaG3zQzKo/s1600/substract-001.png)
 
