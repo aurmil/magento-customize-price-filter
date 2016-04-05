@@ -223,9 +223,7 @@ extends Mage_Catalog_Model_Layer_Filter_Price
             $formattedToPrice = $store->formatPrice($tmpToPrice);
         }
 
-        if (!$fromPrice && $toPrice
-            && $usePriceRanges && $helper->useFirstRangeText()
-        ) {
+        if (!$fromPrice && $toPrice && $helper->useFirstRangeText()) {
             $label = $helper->__('Up to %s', $formattedToPrice);
         } elseif ($fromPrice && !$toPrice) {
             $label = Mage::helper('catalog')->__('%s and above', $formattedFromPrice);
@@ -259,9 +257,7 @@ extends Mage_Catalog_Model_Layer_Filter_Price
         $formattedFromPrice  = $store->formatPrice($fromPrice);
         $formattedToPrice    = $store->formatPrice($toPrice);
 
-        if (!$fromPrice && $toPrice
-            && $usePriceRanges && $helper->useFirstRangeText()
-        ) {
+        if (!$fromPrice && $toPrice && $helper->useFirstRangeText()) {
             $label = $helper->__('Up to %s', $formattedToPrice);
         } elseif ($fromPrice && !$toPrice && $usePriceRanges) {
             // this translation does not exist in Magento CE < 1.7, so this module manages it on its own

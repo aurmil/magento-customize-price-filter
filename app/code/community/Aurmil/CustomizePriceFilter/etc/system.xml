@@ -22,6 +22,16 @@
                             <show_in_website>1</show_in_website>
                             <show_in_store>1</show_in_store>
                         </price_subtraction>
+                        <use_first_range_text translate="label comment" module="aurmil_customizepricefilter">
+                            <label>Use text in first range label</label>
+                            <comment><![CDATA[Displays "Up to [price]" instead of "0 - [price]". Select No to keep Magento default behavior.]]></comment>
+                            <frontend_type>select</frontend_type>
+                            <source_model>adminhtml/system_config_source_yesno</source_model>
+                            <sort_order>7</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </use_first_range_text>
                         <price_ranges translate="label comment" module="aurmil_customizepricefilter">
                             <label>Price Ranges</label>
                             <comment><![CDATA[Format: ([min1])-[max1];[min2]-[max2];...;[minN]-([maxN]) - min1 and maxN are optional. Empty field means default Magento manual behavior.]]></comment>
@@ -36,19 +46,6 @@
                             <show_in_website>1</show_in_website>
                             <show_in_store>1</show_in_store>
                         </price_ranges>
-                        <use_first_range_text translate="label comment" module="aurmil_customizepricefilter">
-                            <label>Use text in first range label</label>
-                            <comment><![CDATA[Displays "Up to [price]" instead of "0 - [price]". Select No to keep Magento default behavior.]]></comment>
-                            <frontend_type>select</frontend_type>
-                            <source_model>adminhtml/system_config_source_yesno</source_model>
-                            <depends>
-                                <price_range_calculation>manual</price_range_calculation>
-                            </depends>
-                            <sort_order>31</sort_order>
-                            <show_in_default>1</show_in_default>
-                            <show_in_website>1</show_in_website>
-                            <show_in_store>1</show_in_store>
-                        </use_first_range_text>
                         <one_price_interval>
                             <depends>
                                 <price_range_calculation separator=",">improved,manual</price_range_calculation>
