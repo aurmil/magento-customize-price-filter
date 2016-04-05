@@ -6,7 +6,7 @@ Magento is able to display price ranges in the layered navigation. It offers 3 w
 
 Another point is that Magento subtracts 0.01 to the highest value of each price range when displaying them. I.e. if range is "100-200", Magento will display "100.00 - 199.99".
 
-This extension allows you to set the exact price ranges you need and to disable subtraction of 0.01.
+This extension allows you to set the exact price ranges you need (globally, per store and/or per category), to disable subtraction of 0.01 and to display "Up to [price]" instead of "0.00 - [price]".
 
 ## Compatibility
 
@@ -64,32 +64,50 @@ No Magento files will be modified but following classes will be extended and som
 
 ## Usage
 
-In __System > Configuration > Catalog > Catalog > Layered Navigation__, this extension adds three new options: __Subtract 0.01 from the highest value of each price range__, __Price Ranges__ and __Use text in first range label__
+In __System > Configuration > Catalog > Catalog > Layered Navigation__, this extension adds three new options:
 
-![](http://4.bp.blogspot.com/-ubCE1QQ-XSs/UHkh7AbIvBI/AAAAAAAALMg/dACSlC0T6Xw/s1600/price-ranges.png)
+### Enable/disable 0.01 subtraction from the highest value of each price range
 
-This option is only available if you choose __Manual__ for __Price Navigation Step Calculation__.
+![](https://1.bp.blogspot.com/-tEmrYPB_3hA/VwNsGHzNJyI/AAAAAAAAXeQ/YZqMFrvxVOE5uQcOjX7gsxtUg6NnVnjoA/s1600/price_filter_substract.PNG)
 
-__Note about the screenshot:__ you can see a semicolon at the end of the field. This is just because the value continues on the right, this is not the last character.
+Allows to display, for example, "100.00 - 200.00" instead of "100.00 - 199.99".
 
-You have to stick to this format:
+This option is available regardless of the value set for __Price Navigation Step Calculation__ and has absolutely no effect on Magento CE < 1.7 as these versions do not substract 0.01.
 
-* ; separates prices ranges
-* - separates min and max values of a given range
-* min value of the first range and max value of the last range are optional. Magento will respectively display "Up to [max1]" (depending on the next option) and "[minN] and above".
+* Select "Yes" (default value) to stay with the Magento default behavior
+* Select "No" to disable subtraction
 
-Leaving this field empty means stay with the Magento basic behavior for manual calculation.
+When disabling subtraction, the price filter becomes inclusive. This means that if the upper value of a range is X, products with min price equals exactly X will be listed (and counted in) for this filter.
 
-__Use text in first range label__ option allows you to display, for example, "Up to €99.99" instead of "€0.00 - €99.99" which is the default label Magento uses.
+### Enable/disable using text in the first range label
 
-The text/translation can be modified if needed in __app/locale/xx_XX/Aurmil_CustomizePriceFilter.csv__ files.
+![](https://2.bp.blogspot.com/-Oj7D-dTRaw0/VwNsHCCOc8I/AAAAAAAAXeU/5GmEU49BdbkvoNmDH4osknQzEPisAOaTw/s1600/price_filter_use_label.PNG)
 
-![](http://1.bp.blogspot.com/-IySUPzoaAls/UHkijgjwwPI/AAAAAAAALMo/f0oaG3zQzKo/s1600/substract-001.png)
+Allows to display, for example, "Up to 99.99" instead of "0.00 - 99.99".
 
 This option is available regardless of the value set for __Price Navigation Step Calculation__.
 
-* Select "Yes" (default value) to stay with the Magento basic behavior
-* Select "No" to disable subtraction of 0.01
+* Select "Yes" to display text
+* Select "No" (default value) to stay with the Magento default behavior
+
+The text/translation can be modified, if needed, in __app/locale/xx_XX/Aurmil_CustomizePriceFilter.csv__ files.
+
+### Use custom price ranges
+
+![](http://4.bp.blogspot.com/-ubCE1QQ-XSs/UHkh7AbIvBI/AAAAAAAALMg/dACSlC0T6Xw/s1600/price-ranges.png)
+
+__Note about the screenshot:__ you can see a semicolon at the end of the field. This is just because the value continues on the right, this is not the last character of the price range.
+
+This option is only available if you choose __Manual__ for __Price Navigation Step Calculation__.
+
+Leaving this field empty means stay with the Magento basic behavior for manual calculation.
+
+You have to stick to this format:
+
+* __;__ separates prices ranges
+* __\-__ separates min and max values of a given range
+* values must be integers
+* min value of the first range and max value of the last range are optional
 
 In __Catalog > Manage Categories__, this extension adds a new category attribute: __Price Ranges__ in the __Display Settings__ tab panel.
 
