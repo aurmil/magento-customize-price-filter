@@ -27,7 +27,7 @@ No Magento files will be modified but following classes will be extended and som
 
 ### With modman
 
-* ```$ modman clone git@github.com:aurmil/magento-customize-price-filter.git```
+* ```$ modman clone https://github.com/aurmil/magento-customize-price-filter.git```
 
 ### Manually
 
