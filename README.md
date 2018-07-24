@@ -68,7 +68,7 @@ In __System > Configuration > Catalog > Catalog > Layered Navigation__, this ext
 
 ### Enable/disable 0.01 subtraction from the highest value of each price range
 
-![](https://1.bp.blogspot.com/-tEmrYPB_3hA/VwNsGHzNJyI/AAAAAAAAXeQ/YZqMFrvxVOE5uQcOjX7gsxtUg6NnVnjoA/s1600/price_filter_substract.PNG)
+![](docs/images/substraction-config.png)
 
 Allows to display, for example, "100.00 - 200.00" instead of "100.00 - 199.99".
 
@@ -81,7 +81,7 @@ When disabling subtraction, the price filter becomes inclusive. This means that 
 
 ### Enable/disable using text in the first range label
 
-![](https://2.bp.blogspot.com/-Oj7D-dTRaw0/VwNsHCCOc8I/AAAAAAAAXeU/5GmEU49BdbkvoNmDH4osknQzEPisAOaTw/s1600/price_filter_use_label.PNG)
+![](docs/images/text-in-first-range-config.png)
 
 Allows to display, for example, "Up to 99.99" instead of "0.00 - 99.99".
 
@@ -94,7 +94,7 @@ The text/translation can be modified, if needed, in __app/locale/xx_XX/Aurmil_Cu
 
 ### Use custom price ranges
 
-![](http://4.bp.blogspot.com/-ubCE1QQ-XSs/UHkh7AbIvBI/AAAAAAAALMg/dACSlC0T6Xw/s1600/price-ranges.png)
+![](docs/images/custom-price-ranges-config.png)
 
 __Note about the screenshot:__ you can see a semicolon at the end of the field. This is just because the value continues on the right, this is not the last character of the price range.
 
@@ -111,7 +111,7 @@ You have to stick to this format:
 
 In __Catalog > Manage Categories__, this extension adds a new category attribute: __Price Ranges__ in the __Display Settings__ tab panel.
 
-![](http://1.bp.blogspot.com/-tpY23PoFlSs/VEe393Ml79I/AAAAAAAARyo/mWC7SL9yc6o/s1600/display-settings.png)
+![](docs/images/category-custom-price-ranges-config.png)
 
 This attribute allows you to override the price ranges configuration option for each catalog category. It will be considered when browsing the corresponding category frontend page.
 
